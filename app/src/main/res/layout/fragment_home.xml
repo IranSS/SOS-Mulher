@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.HomeFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--    Header    -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.2">
+                <!--    saudaçoes    -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="90px"
+                    android:layout_marginTop="150px"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Olá,"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10px"
+                        android:text="usuária"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <!--    mensagem        -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="95px"
+                        android:text="Fique tranquila, fique preparada"
+                        android:textColor="@color/light_gray" />
+
+                    <View
+                        android:layout_width="350dp"
+                        android:layout_height="1dp"
+                        android:layout_gravity="bottom|center"
+                        android:background="@color/light_gray"
+                        android:layout_marginTop="25dp"/>
+                </FrameLayout>
+            </LinearLayout>
+            <!--    Body    -->
+            <!--    acesso rapido        -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Acesso rápido"
+                    android:textSize="18dp"
+                    android:textColor="@color/black"
+                    android:textStyle=""
+                    android:layout_marginLeft="95px"
+                    android:layout_marginBottom="5dp"/>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="96dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <Button
+                            android:id="@+id/enviar_alerta_button"
+                            android:layout_width="320dp"
+                            android:layout_height="48dp"
+                            android:text="Enviar mensagem de alerta rápida"
+                            android:backgroundTint="@color/roxo"
+                            app:cornerRadius="8dp"
+                            android:layout_gravity="bottom|center"
+                            android:textAlignment="textStart"/>
+                        <Button
+                            android:id="@+id/compartilhar_minha_locali"
+                            android:layout_width="320dp"
+                            android:layout_height="48dp"
+                            android:text="Compartilhar minha localização"
+                            android:backgroundTint="@color/light_gray"
+                            app:cornerRadius="8dp"
+                            android:layout_gravity="bottom|center"
+                            android:textAlignment="textStart"/>
+                    </LinearLayout>
+
+                </FrameLayout>
+            </LinearLayout>
+            <!--   historico de notificaçoes         -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Alertas recentes"
+                    android:layout_marginLeft="95px"
+                    android:textStyle="bold"
+                    android:textSize="20dp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_alertas"
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
+
+</FrameLayout>

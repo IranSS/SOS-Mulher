@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/borda_roxa"
+    android:layout_margin="6dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_data"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_mensagem"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_desc"
+        android:text="foi mandado um alerta para todos os meus contatos que estão como emergência sobre minha atividade de hoje"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
+
+</LinearLayout>

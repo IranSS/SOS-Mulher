@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.Theme.SOSMulher" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:windowSplashScreenBackground">@android:color/white</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/sos_mulher_logo_background</item>
+<!--        <item name="android:windowIsTranslucent">true</item>-->
+        <!-- garante que não anima -->
+        <item name="android:windowSplashScreenAnimationDuration">0</item>
+    </style>
+</resources>

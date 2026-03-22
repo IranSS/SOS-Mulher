@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.ContatosFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+<!--Header-->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_weight="0.03">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Adicionar contato de emergência"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textSize="22dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/roxo"
+                android:layout_gravity="bottom"/>
+        </FrameLayout>
+<!--Body-->
+<!--    Adicionar contato   -->
+        <LinearLayout
+            android:layout_width="350dp"
+            android:layout_height="0dp"
+            android:layout_weight="2.5"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="Nome do contato"
+                android:layout_marginTop="10dp"
+                />
+            <EditText
+                android:id="@+id/definir_nome_contato"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/borda"
+                android:textStyle="bold"
+                android:hint="Digite o nome"
+                android:textColorHint="@color/light_blue"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="Email"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:id="@+id/definir_email_contato"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/borda"
+                android:textStyle="bold"
+                android:textColorHint="@color/light_blue"
+                android:hint="Digite o e-mail"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="Relação"
+                android:layout_marginTop="10dp"/>
+            <Spinner
+                android:id="@+id/selecionar_relacao"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/borda"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <CheckBox
+                    android:id="@+id/definir_envio_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/roxo"
+                    android:layout_weight="1"
+                    android:text="Enviar minha localização em emergência"/>
+            </LinearLayout>
+            <Button
+                android:id="@+id/definir_contato"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="Adicionar contato"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:backgroundTint="@color/roxo"
+                app:cornerRadius="18dp"/>
+        </LinearLayout>
+<!--    Mostrar contatos    -->
+        <LinearLayout
+            android:layout_width="380dp"
+            android:layout_height="0dp"
+            android:layout_weight="2.5"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:background="@drawable/borda_roxa">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contatos de emergência"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_contatos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cornerRadius="18dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

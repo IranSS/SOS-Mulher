@@ -1,0 +1,21 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval"
+    android:elevation="4dp">
+
+<!--  sombra  -->
+    <item android:bottom="8dp">
+        <shape android:shape="oval">
+            <solid android:color="#33000000"/> <!-- sombra -->
+        </shape>
+    </item>
+
+    <gradient
+        android:startColor="#FF4D4D"
+        android:endColor="#FF4D5A"
+        android:angle="270"/>
+
+    <!-- tamanho -->
+    <size
+        android:width="120dp"
+        android:height="120dp"/>
+</shape>

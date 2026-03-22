@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="@drawable/borda_white"
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    app:cornerRadius="18dp">
+
+    <!-- Ícone -->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_person_24"
+        android:layout_gravity="center"/>
+
+    <!-- Conteúdo -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:paddingStart="8dp">
+
+        <TextView
+            android:id="@+id/text_nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:text="teste"/>
+
+        <TextView
+            android:id="@+id/text_parentesco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#666"
+            android:text="pai"/>
+    </LinearLayout>
+
+    <!-- Checkbox no final -->
+    <CheckBox
+        android:id="@+id/check_enviar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"/>
+</LinearLayout>
