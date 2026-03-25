@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,8 +14,13 @@
         android:roundIcon="@mipmap/sos_mulher_logo_foreground"
         android:supportsRtl="true"
         android:theme="@style/Theme.SOSMulher">
+        <service
+            android:name=".service.SosService"
+            android:enabled="true"
+            android:exported="true"></service>
+
         <activity
-            android:name=".telas.NotificationActivity"
+            android:name=".telas.ChangePasswordActivity"
             android:exported="false" />
         <activity
             android:name=".telas.AppActivity"
@@ -22,11 +30,10 @@
             android:exported="false" />
         <activity
             android:name=".telas.LoginActivity"
-            android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".LoginActivity"-->
-<!--            android:exported="false"-->
-<!--            android:theme="@style/Theme.SOSMulher" />-->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".LoginActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:theme="@style/Theme.SOSMulher" /> -->
         <activity
             android:name=".telas.SplashActivity"
             android:exported="true">

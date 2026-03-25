@@ -1,21 +1,326 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ConfigsFragment">
+    android:background="#F5F5F5">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <Button
-            android:id="@+id/button_logout"
-            android:backgroundTint="@color/roxo"
-            android:layout_width="189dp"
-            android:layout_height="wrap_content"
-            android:text="Sair da conta"
-            android:textSize="20dp"
-            android:layout_gravity="bottom|center"/>
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginTop="40dp">
 
-</FrameLayout>
+        <!-- TÍTULO -->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Configurações"-->
+<!--            android:textSize="22sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textColor="#666"-->
+<!--            android:gravity="center"/>-->
+
+        <!-- HEADER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp"
+            android:elevation="6dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:src="@drawable/logo"
+                android:scaleType="centerCrop"/>
+        </LinearLayout>
+
+        <!-- NOTIFIAÇÕES -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notificações"
+            android:textStyle="bold" />
+
+        <!-- ITEM -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:src="@drawable/baseline_notifications_24"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/roxo"
+                    android:padding="8dp"/>
+
+                <LinearLayout
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Alertas de emergência"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Receber alertas importantes no celular"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/active_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    app:tint="@color/white"
+                    android:src="@drawable/baseline_email_24"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/roxo"
+                    android:padding="8dp"/>
+
+                <LinearLayout
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notificação via email"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Receber alertas no seu email"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/active_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <!-- SEGURANcA -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Segurança"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <!-- ITEM LISTA Contato -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:id="@+id/contacts"
+                android:padding="14dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/baseline_person_24"
+                    app:tint="#FFFFFF"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/roxo"
+                    android:padding="8dp"/>
+
+                <TextView
+                    android:text="Contatos de emergência"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    app:tint="@color/gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_arrow_forward_ios_24"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <!-- ITEM LISTA Senha -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:id="@+id/change_password"
+                android:padding="14dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/baseline_lock_24"
+                    app:tint="#FFFFFF"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/roxo"
+                    android:padding="8dp"/>
+
+                <TextView
+                    android:text="Senha do aplicativo"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    app:tint="@color/gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_arrow_forward_ios_24"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+        <!-- ITEM LISTA LOCALIZAÇÃO -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:id="@+id/localReal"
+                android:padding="14dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/baseline_location_on_24"
+                    app:tint="#FFFFFF"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/roxo"
+                    android:padding="8dp"/>
+
+                <TextView
+                    android:text="Localização em tempo real"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    app:tint="@color/gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_arrow_forward_ios_24"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Geral"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+        <!-- ITEM LISTA AJUDA E SUPORTE -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:id="@+id/suporte"
+                android:padding="14dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:src="@drawable/baseline_help_outline_24"
+                    app:tint="#FFFFFF"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@color/roxo"
+                    android:padding="8dp"/>
+
+                <TextView
+                    android:text="Ajuda e suporte"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    app:tint="@color/gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_arrow_forward_ios_24"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- BOTÃO -->
+        <Button
+            android:backgroundTint="@color/roxo"
+            android:id="@+id/button_logout"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="24dp"
+            android:text="Sair da conta"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:elevation="10dp"
+            app:cornerRadius="14dp"/>
+
+    </LinearLayout>
+</ScrollView>

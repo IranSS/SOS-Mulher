@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -17,17 +18,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.sos_mulher.Adapter.ContatoAdapter;
 import com.example.sos_mulher.R;
 import com.example.sos_mulher.dao.ContatoDAO;
-import com.example.sos_mulher.dao.UserDAO;
 import com.example.sos_mulher.data.AppDataBase;
 import com.example.sos_mulher.models.Contatos;
 
-import org.w3c.dom.Text;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContatosFragment extends Fragment {
@@ -36,6 +34,8 @@ public class ContatosFragment extends Fragment {
     private ContatoDAO contatoDAO;
     private RecyclerView recyclerView;
     private View rootView;
+    private ContatoAdapter adapter;
+    private List<Contatos> listaContatos;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,16 +99,54 @@ public class ContatosFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         carregarContatos();
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void carregarContatos() {
 
         new Thread(() -> {
-            List<Contatos> lista = contatoDAO.getAll();
+            List<Contatos> novaLista = contatoDAO.getAll();
 
             requireActivity().runOnUiThread(() -> {
-                recyclerView.setAdapter(new ContatoAdapter(lista));
+
+                if (adapter == null) {
+                    listaContatos = new ArrayList<>(novaLista);
+                    adapter = new ContatoAdapter(listaContatos);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    listaContatos.clear();
+                    listaContatos.addAll(novaLista);
+                    adapter.notifyDataSetChanged();
+                }
             });
         }).start();
     }
+    ItemTouchHelper.SimpleCallback callback =
+            new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView,
+                                      @NonNull RecyclerView.ViewHolder viewHolder,
+                                      @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+                    int position = viewHolder.getAdapterPosition();
+                    Contatos contato = listaContatos.get(position);
+
+                    // REMOVE DO BANCO
+                    new Thread(() -> {
+                        contatoDAO.delete(contato);
+                    }).start();
+
+                    // REMOVE DA LISTA
+                    listaContatos.remove(position);
+                    adapter.notifyItemRemoved(position);
+                }
+            };
 }

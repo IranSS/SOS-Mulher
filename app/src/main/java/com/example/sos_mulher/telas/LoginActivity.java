@@ -3,14 +3,12 @@ package com.example.sos_mulher.telas;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.example.sos_mulher.R;
 import com.example.sos_mulher.dao.UserDAO;
@@ -19,73 +17,88 @@ import com.example.sos_mulher.models.User;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String PREF_NAME = "user_session";
+    private static final String KEY_ID = "user_id";
+    private static final String KEY_NAME = "user_name";
+
+    private EditText campoEmail, campoSenha;
+    private UserDAO userDAO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
-        AppDataBase db = Room.databaseBuilder(getApplicationContext(),
-                AppDataBase.class, "user").build();
-        UserDAO dao = db.userDao();
+        userDAO = AppDataBase.getInstance(this).userDao();
 
-        Button cadastro = findViewById(R.id.Button_cadastro);
+        campoEmail = findViewById(R.id.campo_email);
+        campoSenha = findViewById(R.id.campo_senha);
+
         Button entrar = findViewById(R.id.Button_entrar);
+        Button cadastro = findViewById(R.id.Button_cadastro);
 
-        EditText campoEmail = findViewById(R.id.campo_email);
-        EditText campoSenha = findViewById(R.id.campo_senha);
+        verificarSessao();
 
-        SharedPreferences prefs = getSharedPreferences("user_session", MODE_PRIVATE);
+        entrar.setOnClickListener(v -> fazerLogin());
+        cadastro.setOnClickListener(v ->
+                startActivity(new Intent(this, CadasterActivity.class))
+        );
+    }
 
-        int userId = prefs.getInt("user_id", -1);
+    private void verificarSessao() {
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        int userId = prefs.getInt(KEY_ID, -1);
 
-        if(userId != -1){
-            Intent in = new Intent(LoginActivity.this, AppActivity.class);
-            startActivity(in);
+        if (userId != -1) {
+            startActivity(new Intent(this, AppActivity.class));
             finish();
         }
+    }
 
-        entrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Thread(() -> {
-                    String email = campoEmail.getText().toString();
-                    String senha = campoSenha.getText().toString();
-                    User user = dao.findByEmail(email);
+    private void fazerLogin() {
 
-                    if(user.equals(null)){
-                        return;
-                    }
-                    else{
-                        if(user.getPassword().equals(senha)){
+        String email = campoEmail.getText().toString().trim();
+        String senha = campoSenha.getText().toString().trim();
 
-                            SharedPreferences prefs = getSharedPreferences("user_session", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = prefs.edit();
+        if (email.isEmpty() || senha.isEmpty()) {
+            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                            editor.putInt("user_id", user.getUid());
-                            editor.putString("user_name", user.getName());
-                            editor.apply();
+        new Thread(() -> {
 
-                            Intent in = new Intent(LoginActivity.this, AppActivity.class);
-                            startActivity(in);
-                            finish();
-                        }else{
-                            campoEmail.setText("");
-                            campoSenha.setText("");
-                        }
-                    }
+            User user = userDAO.findByEmail(email);
 
-                    Log.d("EMAIL LOGIN", "onClick: " + String.valueOf(user.getName()));
-                }).start();
-            }
-        });
+            runOnUiThread(() -> {
 
-        cadastro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent in = new Intent(LoginActivity.this, CadasterActivity.class);
-                startActivity(in);
-            }
-        });
+                if (user == null) {
+                    Toast.makeText(this, "Usuário não encontrado", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!user.getPassword().equals(senha)) {
+                    Toast.makeText(this, "Senha incorreta", Toast.LENGTH_SHORT).show();
+                    campoSenha.setText("");
+                    return;
+                }
+
+                salvarSessao(user);
+
+                Toast.makeText(this, "Login realizado!", Toast.LENGTH_SHORT).show();
+
+                startActivity(new Intent(this, AppActivity.class));
+                finish();
+            });
+
+        }).start();
+    }
+
+    private void salvarSessao(User user) {
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        prefs.edit()
+                .putInt(KEY_ID, user.getUid())
+                .putString(KEY_NAME, user.getName())
+                .apply();
     }
 }

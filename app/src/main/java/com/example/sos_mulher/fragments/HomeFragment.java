@@ -12,7 +12,9 @@ import androidx.room.Room;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sos_mulher.Adapter.AlertaAdapter;
 import com.example.sos_mulher.R;
@@ -33,6 +35,9 @@ public class HomeFragment extends Fragment {
         TextView userName = view.findViewById(R.id.user_name);
         Bundle bundle = getArguments();
 
+        Button button1 = view.findViewById(R.id.enviar_alerta_button);
+        Button button2 = view.findViewById(R.id.compartilhar_minha_locali);
+
         RecyclerView recyclerAlertas = view.findViewById(R.id.recycler_alertas);
         recyclerAlertas.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -46,6 +51,25 @@ public class HomeFragment extends Fragment {
             });
 
         }).start();
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment novoFragment = new AlertFragment();
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, novoFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Funcionalidade em desenvolvimento 🚧", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         SharedPreferences prefs = requireActivity()
                 .getSharedPreferences("user_session", Context.MODE_PRIVATE);

@@ -1,149 +1,253 @@
 package com.example.sos_mulher.fragments;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.sos_mulher.R;
 import com.example.sos_mulher.dao.ContatoDAO;
 import com.example.sos_mulher.data.AppDataBase;
 import com.example.sos_mulher.models.Alerta;
 import com.example.sos_mulher.models.Contatos;
+import com.example.sos_mulher.service.SosService;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AlertFragment extends Fragment {
 
+    private static final String TAG = "SOS_DEBUG";
+    private static final int REQUEST_LOCATION_PERMISSION = 1001;
+
+    private FusedLocationProviderClient fusedLocationClient;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
+
         View view = inflater.inflate(R.layout.fragment_alert, container, false);
+        Button btnSos = view.findViewById(R.id.btn_sos);
+        ImageButton Button_back_alert = view.findViewById(R.id.Button_back_alert);
 
-        Button enviar = view.findViewById(R.id.btn_sos);
+        Button_back_alert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment novoFragment = new HomeFragment();
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, novoFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
+        Context context = getContext();
 
-        if (ActivityCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(requireActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        if (context != null) {
+            fusedLocationClient =
+                    LocationServices.getFusedLocationProviderClient(context);
         }
 
-        enviar.setOnClickListener(v -> {
-
-            FusedLocationProviderClient fusedLocationClient =
-                    LocationServices.getFusedLocationProviderClient(requireContext());
-
-            if (ActivityCompat.checkSelfPermission(getContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                Toast.makeText(getContext(), "Permissão de localização necessária", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            fusedLocationClient.getCurrentLocation(
-                            com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY,
-                            null
-                    )
-                    .addOnSuccessListener(location -> {
-
-                        if (location != null) {
-
-                            double lat = location.getLatitude();
-                            double lng = location.getLongitude();
-
-                            buscarContatosEEnviar(lat, lng);
-
-                        } else {
-                            Toast.makeText(getContext(), "Não foi possível obter localização", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        });
+        if (btnSos != null) {
+            btnSos.setOnClickListener(v -> verificarPermissao());
+        }
 
         return view;
     }
-    private void enviarEmail(String[] destinatarios, double lat, double lng) {
 
-        //evitar crash
-        if (!isAdded()) return;
+    /* ===================== PERMISSÃO ===================== */
 
-        String assunto = "🚨 SOS - Preciso de ajuda!";
+    private void verificarPermissao() {
+        Context context = getContext();
+        if (context == null) return;
 
-        String mensagem = "🚨 SOS! Estou em perigo!\n\n" +
-                "Preciso de ajuda urgente.\n\n" +
-                "📍 Minha localização:\n" +
-                "https://www.google.com/maps?q=" + lat + "," + lng;
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED) {
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-
-        intent.putExtra(Intent.EXTRA_EMAIL, destinatarios);
-        intent.putExtra(Intent.EXTRA_SUBJECT, assunto);
-        intent.putExtra(Intent.EXTRA_TEXT, mensagem);
-
-        startActivity(Intent.createChooser(intent, "Enviar SOS..."));
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION
+            );
+        } else {
+            obterLocalizacaoEEnviar();
+        }
     }
+
+    /* ===================== LOCALIZAÇÃO ===================== */
+
+    private void obterLocalizacaoEEnviar() {
+        Context context = getContext();
+        if (context == null || fusedLocationClient == null) return;
+
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        fusedLocationClient
+                .getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+                .addOnSuccessListener(location -> {
+                    if (!isAdded() || location == null) return;
+
+                    double lat = location.getLatitude();
+                    double lng = location.getLongitude();
+
+                    Log.d(TAG, "Localização: " + lat + ", " + lng);
+                    buscarContatosEEnviar(lat, lng);
+                })
+                .addOnFailureListener(e ->
+                        Log.e(TAG, "Erro ao obter localização", e)
+                );
+    }
+
+    /* ===================== BUSCAR CONTATOS ===================== */
+
     private void buscarContatosEEnviar(double lat, double lng) {
 
         new Thread(() -> {
+            Context context = getContext();
+            if (context == null) return;
 
-            AppDataBase db = AppDataBase.getInstance(getContext());
+            AppDataBase db = AppDataBase.getInstance(context);
             ContatoDAO contatoDAO = db.contatoDAO();
 
-            List<Contatos> lista = contatoDAO.getContatosParaEnviar();
-
+            List<Contatos> contatos = contatoDAO.getContatosParaEnviar();
             ArrayList<String> emails = new ArrayList<>();
 
-            for (Contatos c : lista) {
-                emails.add(c.getEmail());
+            for (Contatos c : contatos) {
+                if (c.getSendMsg()) {
+                    emails.add(c.getEmail());
+                }
             }
 
             String[] destinatarios = emails.toArray(new String[0]);
 
-            requireActivity().runOnUiThread(() -> {
+            Activity activity = getActivity();
+            if (activity == null) return;
 
+            activity.runOnUiThread(() -> {
                 if (!isAdded()) return;
 
                 if (destinatarios.length > 0) {
-                    enviarEmail(destinatarios, lat, lng);
+                    enviarMensagemSeguro(destinatarios, lat, lng);
                     salvarAlerta();
                 } else {
-                    Toast.makeText(getContext(), "Nenhum contato selecionado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            context,
+                            "Nenhum contato selecionado",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             });
-
         }).start();
     }
+
+    /* ===================== MENSAGEM / CLIPBOARD ===================== */
+
+    private void enviarMensagemSeguro(String[] destinatarios, double lat, double lng) {
+
+        Context context = getContext();
+        if (context == null || destinatarios.length == 0) return;
+
+        String mensagem =
+                "🚨 SOS! Estou em perigo!\n\n" +
+                        "📍 Minha localização:\n" +
+                        "https://www.google.com/maps?q=" + lat + "," + lng;
+
+        // INTENT EXCLUSIVO PARA EMAIL
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(android.net.Uri.parse("mailto:"));
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, destinatarios);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "🚨 ALERTA DE EMERGÊNCIA");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, mensagem);
+
+        try {
+            startActivity(emailIntent);
+        } catch (android.content.ActivityNotFoundException e) {
+            Toast.makeText(context, "Nenhum app de e-mail instalado", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /* ===================== SALVAR ALERTA ===================== */
+
     private void salvarAlerta() {
-
         new Thread(() -> {
+            Context context = getContext();
+            // Inicia o foreground service
+//            ContextCompat.startForegroundService(
+//                    context,
+//                    new Intent(context, SosService.class)
+//            );
+            if (context == null) return;
 
-            AppDataBase db = AppDataBase.getInstance(getContext());
+            AppDataBase db = AppDataBase.getInstance(context);
 
             Alerta alerta = new Alerta();
-
             alerta.setMensagem("Alerta enviado com sucesso");
-
-            String data = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm")
-                    .format(new java.util.Date());
-
-            alerta.setData(data);
+            alerta.setData(
+                    new SimpleDateFormat("dd/MM/yyyy HH:mm")
+                            .format(new Date())
+            );
 
             db.alertaDAO().insert(alerta);
-
+            Log.d(TAG, "Alerta salvo");
         }).start();
+    }
+
+    /* ===================== CALLBACK PERMISSÃO ===================== */
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode,
+            @NonNull String[] permissions,
+            @NonNull int[] grantResults
+    ) {
+
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                obterLocalizacaoEEnviar();
+            } else {
+                Context context = getContext();
+                if (context != null) {
+                    Toast.makeText(
+                            context,
+                            "Permissão de localização negada",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            }
+        }
     }
 }

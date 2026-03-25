@@ -84,13 +84,13 @@
                     android:layout_marginTop="20dp"
                     android:inputType="textImeMultiLine|textPassword"
                     android:autofillHints="password" />
-                <TextView
-                    android:id="@+id/alterar_senha_redirect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/underlined_text"
-                    android:layout_gravity="end"
-                    />
+<!--                <TextView-->
+<!--                    android:id="@+id/alterar_senha_redirect"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/underlined_text"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    />-->
                 <Button
                     android:id="@+id/Button_entrar"
                     android:layout_width="130dp"

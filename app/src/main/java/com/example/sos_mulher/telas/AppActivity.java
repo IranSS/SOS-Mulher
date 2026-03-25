@@ -35,22 +35,18 @@ public class AppActivity extends AppCompatActivity {
             Fragment fragment = null;
 
             if(item.getItemId() == R.id.nav_menu){
-                Log.d("Teste", "Teste home");
                 fragment = new HomeFragment();
                 if(bundle != null){
                     fragment.setArguments(bundle);
                 }
             }
-            if(item.getItemId() == R.id.nav_alert){
-                Log.d("Teste", "Teste contatos");
-                fragment = new AlertFragment();
-            }
+//            if(item.getItemId() == R.id.nav_alert){
+//                fragment = new AlertFragment();
+//            }
             if(item.getItemId() == R.id.nav_contatos){
-                Log.d("Teste", "Teste contatos");
                 fragment = new ContatosFragment();
             }
             if(item.getItemId() == R.id.nav_configs){
-                Log.d("Teste", "Teste contatos");
                 fragment = new ConfigsFragment();
             }
             if(fragment != null){

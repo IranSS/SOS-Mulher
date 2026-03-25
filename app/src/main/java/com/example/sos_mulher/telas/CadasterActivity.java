@@ -31,8 +31,7 @@ public class CadasterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cadaster);
 
         // usar database e seus metodos
-        AppDataBase db = Room.databaseBuilder(getApplicationContext(),
-                AppDataBase.class, "user").build();
+        AppDataBase db = AppDataBase.getInstance(this);
         UserDAO userDAO = db.userDao();
 
         Button cadastrar = findViewById(R.id.Button_cadastro);
